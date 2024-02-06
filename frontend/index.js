@@ -4,7 +4,15 @@ function moduleProject3() {
 
   function buildNav(links) {
     //  ✨ do your magic here
-    return document.createElement('nav')
+    const nav = document.createElement('nav');
+    const navLinks = links.forEach(({href, textContent, title}) => {
+      const aTag = document.createElement('a');
+      aTag.href = href;
+      aTag.textContent = textContent;
+      aTag.className = title;
+      nav.appendChild(aTag);
+    })
+    return nav;
   }
 
   // ❗ DOM creation using your `buildNav` component (do not change):
@@ -20,6 +28,34 @@ function moduleProject3() {
 
   function buildLearnerCard(learner, languages) {
     //  ✨ do your magic here
+    const container = document.createElement('div');
+    container.classList.add('learner-card');
+
+    const pName = document.createElement('p');
+    pName.textContent = learner.fullName;
+
+    const pID = document.createElement('p');
+    pID.textContent = `Learner ID: ${learner.id}`;
+
+    const pDOB = document.createElement('p');
+    pDOB.textContent = `Date of Birth: ${learner.dateOfBirth}`;
+
+    const favLangP = document.createElement('p');
+    const favLanguage = languages.find(lang => lang.id === learner.favLanguage);
+    favLangP.textContent = `Favorite Language: ${favLanguage.name}`;
+
+    [pName, pID, pDOB, favLangP].forEach(p => {
+      container.appendChild(p);
+    })
+
+    container.addEventListener('click', evt => {
+      document.querySelectorAll('.learner-card').forEach(card => {
+        card.classList.remove('active');
+      })
+      container.classList.add('active');
+    })
+
+    return container;
   }
 
   {
@@ -40,15 +76,68 @@ function moduleProject3() {
       { id: 17, fullName: 'Daniel Castillo', dateOfBirth: '1995-11-05', favLanguage: 12 }
     ]
     //  ✨ do your magic here
+    learners.forEach(learner => {
+      const cardCreator = buildLearnerCard(learner, languages)
+      document.querySelector('section').appendChild(cardCreator);
+    })
   }
 
   // 👉 TASK 3 - Write a `buildFooter` component that returns a footer
 
   function buildFooter(footerData) {
     //  ✨ do your magic here
-    return document.createElement('footer')
+    const footer = document.createElement('footer');
+
+    const companyInfo = document.createElement('div');
+    companyInfo.classList.add('company-info');
+
+    const companyNamep = document.createElement('p');
+    companyNamep.classList.add('company-name');
+    companyNamep.textContent = footerData.companyName;
+
+    const address = document.createElement('p');
+    address.classList.add('address');
+    address.textContent = footerData.address;
+
+    const contact = document.createElement('p');
+    contact.classList.add('contact-email');
+    contact.textContent = footerData.contactEmail;
+
+    [companyNamep, address, contact].forEach(ele => {
+      companyInfo.appendChild(ele);
+    });
+
+    const socialMedia = document.createElement('div');
+    socialMedia.classList.add('social-meida');
+
+    const twitterLink = document.createElement('a');
+    twitterLink.href = footerData.twitter;
+    twitterLink.textContent = 'Twitter'
+
+    const facebookLink = document.createElement('a');
+    facebookLink.href = footerData.facebook;
+    facebookLink.textContent = 'Facebook'
+
+    const instagramLink = document.createElement('a');
+    instagramLink.href = footerData.instagram;
+    instagramLink.textContent = 'Instagram';
+
+    [twitterLink, facebookLink, instagramLink].forEach(ele => {
+      socialMedia.appendChild(ele);
+    });
+
+    const currentYear = new Date().getFullYear();
+    const copyright = document.createElement('div');
+    copyright.textContent = `© ${footerData.companyName.toUpperCase()} ${currentYear}`
+
+    footer.appendChild(companyInfo);
+    footer.appendChild(socialMedia);
+    footer.appendChild(copyright);
+
+    return footer
   }
 
+  
   // ❗ DOM creation using your `buildFooter` component (do not change):
   document.body.appendChild(buildFooter({
     companyName: 'Bloom Institute of Technology',
@@ -64,6 +153,12 @@ function moduleProject3() {
   // 👉 TASK 4 - Clicking on the section should deactivate the active card
 
   //  ✨ do your magic here
+  document.addEventListener('click', evt => {
+    if(evt.target === document.querySelector('section')) {
+      const learners = document.querySelectorAll('.learner-card');
+      learners.forEach(card => card.classList.remove('active'));
+    }
+});
 }
 
 // ❗ DO NOT CHANGE THIS CODE
